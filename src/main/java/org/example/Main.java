@@ -140,7 +140,7 @@ public class Main {
 
         // 5. Видалення пацієнта
         System.out.println("Видаляємо пацієнта з ID 'ID54321'...");
-     //   patientDAO.deletePatient("ID54321");
+//        patientDAO.deletePatient("ID67890");
 
         // Перевірка видалення
         System.out.println("Отримуємо всіх пацієнтів після видалення:");

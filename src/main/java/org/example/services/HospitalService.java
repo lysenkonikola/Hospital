@@ -6,9 +6,14 @@ import org.example.models.Doctor;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class HospitalService {
+
+    private static final Logger logger = Logger.getLogger(HospitalService.class.getName());
+
     /**
      * Finds all appointments for a given doctor.
      *
@@ -17,9 +22,12 @@ public class HospitalService {
      * @return List of appointments with the specified doctor.
      */
     public List<Appointment> findAppointmentsByDoctor(List<Appointment> appointments, Doctor doctor) {
-        return appointments.stream()
+        logger.log(Level.INFO, "Finding appointments for doctor: {0}", doctor.getLastName());
+        List<Appointment> result = appointments.stream()
                 .filter(appointment -> appointment.getDoctor().equals(doctor))
                 .collect(Collectors.toList());
+        logger.log(Level.INFO, "Found {0} appointments for doctor {1}", new Object[]{result.size(), doctor.getLastName()});
+        return result;
     }
 
     /**
@@ -29,10 +37,13 @@ public class HospitalService {
      * @return Sorted list of doctors by specialization and last name.
      */
     public List<Doctor> sortDoctorsBySpecializationAndName(List<Doctor> doctors) {
-        return doctors.stream()
+        logger.log(Level.INFO, "Sorting doctors by specialization and last name");
+        List<Doctor> sortedList = doctors.stream()
                 .sorted(Comparator.comparing(Doctor::getSpecialization)
                         .thenComparing(Doctor::getLastName))
                 .collect(Collectors.toList());
+        logger.log(Level.INFO, "Sorted doctors: {0}", sortedList);
+        return sortedList;
     }
 
     /**
@@ -44,10 +55,13 @@ public class HospitalService {
      * @return List of confirmed appointments within the specified date range.
      */
     public List<Appointment> findConfirmedAppointments(List<Appointment> appointments, LocalDate startDate, LocalDate endDate) {
-        return appointments.stream()
+        logger.log(Level.INFO, "Finding confirmed appointments between {0} and {1}", new Object[]{startDate, endDate});
+        List<Appointment> result = appointments.stream()
                 .filter(appointment -> appointment.isConfirmed())
                 .filter(appointment -> !appointment.getAppointmentDate().isBefore(startDate) &&
                         !appointment.getAppointmentDate().isAfter(endDate))
                 .collect(Collectors.toList());
+        logger.log(Level.INFO, "Found {0} confirmed appointments in date range", result.size());
+        return result;
     }
 }
